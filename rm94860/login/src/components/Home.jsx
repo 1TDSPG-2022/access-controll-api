@@ -1,9 +1,18 @@
 import React from 'react';
 
-// import { Container } from './styles';
+export default function Home(){
+    const verificar = sessionStorage.getItem("usuario-validado")
 
-function components() {
-  return <div />;
+    useEfect(() => {
+        if(verificar == null){
+            window.location = "/";
+        }
+    }, []);
+
+    return(
+
+        
+
+        <div>Home</div>
+    )
 }
-
-export default components;

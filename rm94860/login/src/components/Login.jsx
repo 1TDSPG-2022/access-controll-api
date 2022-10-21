@@ -15,28 +15,42 @@ const handleChange = (e)=>{
 const logar =async (e)=>{
     e.preventDefault();
 
-    const requestOptios = {
+    const requestOptions = {
         method : "POST",
         headers : { "Content-Type" : "application/json" },
         body: JSON.stringify(usuario),
     }
     
-    const response = await fetch("")
+    const response = await fetch(
+        "http://localhost:8080/ControleAcesso/rest/login/",
+        requestOptions
+        )
 
-}
+        const data = await response.json()
+
+        if(data.login){
+            sessionStorage.setItem("usuario-validado", data.login);
+            window.location = "/home"
+        }else{
+            window.location = "/";
+        }
+
+
+    }
+
     return(
         <>
         <div>
             <h1>VALIDAÇÃO DE USUÁRIOS</h1>
-            <form on onSubmit="">
+            <form on onSubmit={logar}>
                 <fieldset>
                     <legend>Login</legend>
                     <div>
-                        <label for="idLogin">Usuário</label>
+                        <label htmlFor="idLogin">Usuário</label>
                         <input type="text" name="login" id="idLogin" placeholder='Login' value={usuario.login} onChange={handleChange} />
                     </div>
                     <div>
-                        <label for="idSenha">Senha</label>
+                        <label htmlFor="idSenha">Senha</label>
                         <input type="password" name="senha" id="idSenha" placeholder='Senha' value={usuario.senha} onChange={handleChange} />
                     </div>
                     <div>

@@ -2,10 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Menu() {
+
+    const logout = () => {
+        sessionStorage.removeItem("usuario-validado")
+        window.location = "/"
+    }
+
+    const usuario = sessionStorage.getItem("usuario-validado") 
+
+    
     return(
         <header>
-            <Link to="/home">Home</Link>  <Link to="/produto">Produto</Link>
-            <Link to="/menu">Menu</Link>  <Link to="/login">Login</Link>
+            <Link to="/home">Home</Link>        <Link to="/produto">Produto</Link>   {" "}
+            <Link to="/login">Login</Link>    {" "}      <button onClick={logout}>{usuario} Logout</button>
         </header>
     )
 }

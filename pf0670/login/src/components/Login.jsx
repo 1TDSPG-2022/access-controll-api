@@ -29,6 +29,7 @@ export default function Login() {
 
     if (data.login) {
       sessionStorage.setItem("usuario-validado", data.login);
+      sessionStorage.setItem("objUser", JSON.stringify(data));
       window.location = "/home";
     } else {
       window.location = "/";

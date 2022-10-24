@@ -10,5 +10,12 @@ export default function Produto() {
     }
   }, []);
 
-  return <div>Produto</div>;
+  const objRecuperado = JSON.parse(sessionStorage.getItem("objUser"));
+
+  return (
+    <div>
+      Produto
+      <p>Nome do usuário : {objRecuperado.login}</p>
+    </div>
+  );
 }

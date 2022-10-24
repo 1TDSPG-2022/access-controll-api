@@ -1,54 +1,58 @@
 package br.com.fiap.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import br.com.fiap.connection.ConectionFactory;
 import br.com.fiap.to.UsuarioTO;
 
 public class UsuarioDAO {
-	public static List<UsuarioTO> listaUsuario;
 
+	private Connection conn = null;
+	
 	public UsuarioDAO() {
-		if (listaUsuario == null) {
-			listaUsuario = new ArrayList<UsuarioTO>();
-			
-			UsuarioTO user = new UsuarioTO();
-			user.setLogin("Selva");
-			user.setSenha("12345");
-			listaUsuario.add(user);
-			
-			user = new UsuarioTO();
-			user.setLogin("2");
-			user.setSenha("2");
-			listaUsuario.add(user);
-			
-			user = new UsuarioTO();
-			user.setLogin("3");
-			user.setSenha("3");
-			listaUsuario.add(user);
-			
-			user = new UsuarioTO();
-			user.setLogin("4");
-			user.setSenha("4");
-			listaUsuario.add(user);
-			
-			user = new UsuarioTO();
-			user.setLogin("5");
-			user.setSenha("5");
-			listaUsuario.add(user);
-		}
+		this.conn = new ConectionFactory().getConnection();
 	}
-
-	public UsuarioTO loginDAO(UsuarioTO u) {
-		for (int i = 0; i < listaUsuario.size(); i++) {
-			if (listaUsuario.get(i).getLogin().equals(u.getLogin())
-					&& listaUsuario.get(i).getSenha().equals(u.getSenha())) {
-				System.out.println("USUÁRIO " + listaUsuario.get(i).getLogin() + " VALIDADO!");
-				return listaUsuario.get(i);
-				
+	
+	public UsuarioTO loginDAO(UsuarioTO ut) {
+		
+		PreparedStatement ps = null;
+		
+		try {
+			
+			String sqlQuery = "SELECT * FROM T_RWD_LOGIN WHERE LOGIN = ? AND SENHA = ?";
+			
+			ps = conn.prepareStatement(sqlQuery);
+			
+			ps.setString(1, ut.getLogin());
+			ps.setString(2, ut.getSenha());
+			
+			ResultSet rs = ps.executeQuery();
+			
+			UsuarioTO u = null;
+			
+			while (rs.next()) {
+				u = new UsuarioTO();
+				u.setLogin(rs.getString(2));
+				u.setSenha(rs.getString(3));
 			}
+			
+			rs.close();
+			ps.close();
+			conn.close();
+			
+			System.out.println("USUÁRIO " + u.getLogin() + " VALIDADO!");
+			
+			return u;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		System.out.println("O USUÁRIO " + u.getLogin() + " NÃO FOI VALIDADO!");
+		
+		System.out.println("USUÁRIO " + ut.getLogin() + " NÃO FOI VALIDADO!");
 		return null;
 	}
-
+	
+	
 }
